@@ -6,8 +6,8 @@ Both the ZSH command completion for the Salesforce CLI and a script for generati
 
 ## Dependencies
 
-- Salesforce CLI
-- jq
+- Salesforce CLI : [download](https://developer.salesforce.com/tools/sfdxcli)
+- jq : [download](https://stedolan.github.io/jq/)
 
 ## Usage
 
