@@ -1,6 +1,6 @@
 # salesforce-cli-zsh-completion
 
-![sfdx-cli-automation](https://user-images.githubusercontent.com/746259/34641743-89743d94-f2bd-11e7-9acd-93bd371c168c.gif)
+![sfdx-cli-automation](https://user-images.githubusercontent.com/746259/34641780-083a2224-f2be-11e7-840a-55833e674ef0.gif)
 
 Both the ZSH command completion for the Salesforce CLI and a script for generating it.
 
