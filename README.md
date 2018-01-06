@@ -30,7 +30,7 @@ compinit
 
 Close and open your terminal.
 
-## Update the ZSH completion file.
+## Update the ZSH completion file
 
 If you want to update the `_sfdx` completion file, run the following script:
 

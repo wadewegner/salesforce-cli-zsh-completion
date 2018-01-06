@@ -19,20 +19,16 @@ completion+="\nlocal -a _1st_arguments"
 completion+="\n"
 completion+="\n_1st_arguments=("
 
-TEST=""
+commands=""
 
 while read name description
 do
-  #echo "name:" $name
-  #echo "description:" $description
-
   name="$(echo $name | sed -e 's/:/\\:/g')"
-  TEST="${TEST}\n\t\"$name\":\"$description\""
+  commands="${commands}\n\t\"$name\":\"$description\""
 
 done <<< "$(jq -r 'to_entries[] | "\(.value.name)\t\(.value.description)"' commands-list.json)"
 
-#echo "last: $TEST"
-completion+=$TEST
+completion+=$commands
 completion+="\n)"
 completion+="\n"
 completion+="\n_arguments '*:: :->command'"
@@ -43,4 +39,4 @@ completion+="\n  return"
 completion+="\nfi"
 completion+="\n"
 
-echo $completion > _sfdx  
+echo $completion > _sfdx
