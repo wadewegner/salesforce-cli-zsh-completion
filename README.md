@@ -9,6 +9,8 @@ Both the Zsh command completion for the Salesforce CLI and a script for generati
 - Salesforce CLI : [download](https://developer.salesforce.com/tools/sfdxcli)
 - jq : [download](https://stedolan.github.io/jq/)
 
+Note: you only need `jq` if you plan to run the script to generate the completion file. If not, you only need the CLI. (But `jq` is pretty awesome, so you probably want it anyway.)
+
 ## Usage
 
 Follow the following steps to use these Salesforce CLI completions in the Zsh.
