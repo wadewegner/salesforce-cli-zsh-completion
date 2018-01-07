@@ -65,6 +65,10 @@ do
     flagDescription=${flagArray2[1]}
     flagChar=${flagArray2[2]}
 
+    # escape braces
+    flagDescription=$(echo $flagDescription | sed -e "s/\[/\\\[/g")
+    flagDescription=$(echo $flagDescription | sed -e "s/\]/\\\]/g")
+
     if [ "$flagChar" != "" ]
     then
       completion+="\n      '(-"$flagChar"|--"$flagName")'{-"$flagChar",--"$flagName"}'["$flagDescription"]' \\\\"
