@@ -12,7 +12,7 @@ completion+="#compdef sfdx"
 # header
 completion+="\n"
 completion+="\n# DESCRIPTION: Zsh completion script for the Salesforce CLI"
-completion+="\n# AUTHOR: Wade Wegner"
+completion+="\n# AUTHOR: Wade Wegner (@WadeWegner)"
 completion+="\n# REPO: https://github.com/wadewegner/salesforce-cli-zsh-completion"
 completion+="\n# LICENSE: https://github.com/wadewegner/salesforce-cli-zsh-completion/blob/master/LICENSE"
 completion+="\n"
@@ -52,11 +52,14 @@ do
   completion+="\n  $fullCommand)"
   completion+="\n    _command_args=("
 
-  delimitedFlags=$(jq -r '. | select((.command == "'$command'") and (.topic == "'$topic'")) | .flags | .[] | .name + "\t" + .description + "\t" + .char' commands-display.json)  #echo "jqFlags: " $delimitedFlags
+  delimitedFlags=$(jq -r '. | select((.command == "'$command'") and (.topic == "'$topic'")) | .flags | .[] | .name + "\t" + .description + "\t" + .char' commands-display.json)
   
+  # create the array based on newlines
   IFS=$'\n'
   flagArray=($delimitedFlags)
+  # create the array based on tabs (from the jq above)
   IFS=$'\t'
+  
   for flagArrayRow in "${flagArray[@]}"
   do
     flagArray2=($flagArrayRow)
@@ -69,6 +72,7 @@ do
     flagDescription=$(echo $flagDescription | sed -e "s/\[/\\\[/g")
     flagDescription=$(echo $flagDescription | sed -e "s/\]/\\\]/g")
 
+    # different format if there's not a single character arg
     if [ "$flagChar" != "" ]
     then
       completion+="\n      '(-"$flagChar"|--"$flagName")'{-"$flagChar",--"$flagName"}'["$flagDescription"]' \\\\"
