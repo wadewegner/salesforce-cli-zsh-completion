@@ -10,7 +10,7 @@ completion+="#compdef sfdx"
 
 # header
 completion+="\n"
-completion+="\n# DESCRIPTION: ZSH completion script for the Salesforce CLI"
+completion+="\n# DESCRIPTION: Zsh completion script for the Salesforce CLI"
 completion+="\n# AUTHOR: Wade Wegner (@WadeWegner)"
 completion+="\n# REPO: https://github.com/wadewegner/salesforce-cli-zsh-completion"
 completion+="\n# LICENSE: https://github.com/wadewegner/salesforce-cli-zsh-completion/blob/master/LICENSE"

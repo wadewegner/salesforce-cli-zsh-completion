@@ -1,6 +1,6 @@
 #compdef sfdx
 
-# DESCRIPTION: ZSH completion script for the Salesforce CLI
+# DESCRIPTION: Zsh completion script for the Salesforce CLI
 # AUTHOR: Wade Wegner
 # REPO: https://github.com/wadewegner/salesforce-cli-zsh-completion
 # LICENSE: https://github.com/wadewegner/salesforce-cli-zsh-completion/blob/master/LICENSE
@@ -99,4 +99,3 @@ if (( CURRENT == 1 )); then
  _describe -t commands "sfdx command" _1st_arguments
  return
 fi
-

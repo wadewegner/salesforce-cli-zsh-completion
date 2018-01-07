@@ -2,7 +2,7 @@
 
 <img width="600" alt="sfdx-cli-automation" src="https://user-images.githubusercontent.com/746259/34641780-083a2224-f2be-11e7-840a-55833e674ef0.gif">
 
-Both the ZSH command completion for the Salesforce CLI and a script for generating it.
+Both the Zsh command completion for the Salesforce CLI and a script for generating it.
 
 ## Dependencies
 
@@ -11,7 +11,7 @@ Both the ZSH command completion for the Salesforce CLI and a script for generati
 
 ## Usage
 
-Follow the following steps to use these Salesforce CLI completions in the ZSH.
+Follow the following steps to use these Salesforce CLI completions in the Zsh.
 
 First, clone the repo locally.
 
@@ -32,7 +32,7 @@ compinit
 
 Close and open your terminal.
 
-## Update the ZSH completion file
+## Update the Zsh completion file
 
 If you want to update the `_sfdx` completion file, run the following script:
 
