@@ -99,3 +99,22 @@ if (( CURRENT == 1 )); then
  _describe -t commands "sfdx command" _1st_arguments
  return
 fi
+
+local -a _command_args
+case "$words[1]" in
+  force:lightning:component:create)
+    _command_args=(
+			'(-a|--apiversion)'{-a,--apiversion}'[API version number (41.0*,40.0)]' \
+			'(-n|--componentname)'{-n,--componentname}'[(required) name of the generated Lightning component]' \
+			'(-d|--outputdir)'{-d,--outputdir}'[folder for saving the created files]' \
+			'(-t|--template)'{-t,--template}'[template to use for file creation]' \
+    )
+    ;;
+  esac
+
+_arguments \
+  $_command_args \
+  '(--json)--json[JSON output]' \
+  '(--loglevel)--loglevel[logging level for this command invocation]' \
+  '(--help)--help[help about the current command]' \
+  && return 0
