@@ -57,3 +57,20 @@ unfunction _sfdx && autoload -U _sfdx
 ```
 
 Enjoy!
+
+## Oh My Zsh
+
+Users of [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh) can import this auto-completion as a plugin. To install it, just clone this repository into the custom plugins folder.
+
+```console
+git clone git@github.com:wadewegner/salesforce-cli-zsh-completion.git ~/.oh-my-zsh/custom/plugins/salesforce-cli-zsh-completion
+```
+
+Enable it by editing `~/.zshrc`. Add `salesforce-cli-zsh-completion` to the list of extra plugins, like this:
+
+```sh
+# ~/.zshrc
+plugins=(salesforce-cli-zsh-completion)
+```
+
+Reload your shell and enjoy.
