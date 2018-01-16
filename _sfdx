@@ -261,7 +261,7 @@ case "$words[1]" in
  '(-l|--loginurl)'{-l,--loginurl}'[Salesforce instance login URL (https://login.salesforce.com*)]' \
  '(-x|--sourceapiversion)'{-x,--sourceapiversion}'[source API version number (41.0*)]' \
  '(-s|--namespace)'{-s,--namespace}'[project associated namespace]' \
- '(-p|--defaultpackagedir)'{-p,--defaultpackagedir}'[default package directory name (force-app*)]:file:_files' \
+ '(-p|--defaultpackagedir)'{-p,--defaultpackagedir}'[default package directory name (force-app*)]' \
  '(--json)--json[JSON output]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -397,10 +397,10 @@ case "$words[1]" in
  ;;
  force:lightning:lint)
  _command_args=(
- '(-i|--ignore)'{-i,--ignore}'[pattern used to ignore some folders]' \
- '(--files)--files[pattern used to include specific files]:file:_files' \
- '(-j|--json)'{-j,--json}'[format output as JSON]' \
- '(--config)--config[path to a custom ESLint configuration file]:file:_files' \
+ '(--ignore)--ignore[pattern used to ignore some folders]' \
+ '(--files)--files[pattern used to include specific files]' \
+ '(--json)--json[format output as JSON]' \
+ '(--config)--config[path to a custom ESLint configuration file]' \
  '(--verbose)--verbose[report warnings in addition to errors]' \
  '(--exit)--exit[exit with error code 1 if there are lint issues]' \
  )
@@ -459,7 +459,7 @@ case "$words[1]" in
  ;;
  force:org:open)
  _command_args=(
- '(-p|--path)'{-p,--path}'[navigation URL path]:file:_files' \
+ '(-p|--path)'{-p,--path}'[navigation URL path]' \
  '(-r|--urlonly)'{-r,--urlonly}'[display navigation URL, but don’t launch browser]' \
  '(-u|--targetusername)'{-u,--targetusername}'[username or alias for the target org; overrides default target org]' \
  '(--json)--json[format output as json]' \
@@ -574,7 +574,7 @@ case "$words[1]" in
  '(-w|--wait)'{-w,--wait}'[wait time for command to finish in minutes (default: -1 (no limit))]' \
  '(-r|--retrievetargetdir)'{-r,--retrievetargetdir}'[directory root for the retrieved files]:file:_files' \
  '(-k|--unpackaged)'{-k,--unpackaged}'[file path of manifest of components to retrieve]:file:_files' \
- '(-d|--sourcedir)'{-d,--sourcedir}'[source dir to use instead of default manifest sfdx-project.xml]' \
+ '(-d|--sourcedir)'{-d,--sourcedir}'[source dir to use instead of default manifest sfdx-project.xml]:file:_files' \
  '(-p|--packagenames)'{-p,--packagenames}'[a comma-separated list of packages to retrieve]' \
  '(-s|--singlepackage)'{-s,--singlepackage}'[a single-package retrieve (default: false)]' \
  '(-i|--jobid)'{-i,--jobid}'[WARNING: The flag "jobid" has been deprecated and will be removed in v41.01.0 or later. Instead, use "sfdx force:mdapi:retrieve:report -i <jobId> -r <targetDir>".]' \
@@ -603,7 +603,7 @@ case "$words[1]" in
  ;;
  force:config:set)
  _command_args=(
- '(-g|--global)'{-g,--global}'[set config var globally (to be used from any directory)]:file:_files' \
+ '(-g|--global)'{-g,--global}'[set config var globally (to be used from any directory)]' \
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel[logging level for this command invocation (error*,trace,debug,info,warn,fatal)]' \
  )
@@ -741,7 +741,7 @@ case "$words[1]" in
  ;;
  force:data:tree:export)
  _command_args=(
- '(-q|--query)'{-q,--query}'[soql query, or filepath of file containing a soql query, to retrieve records]:file:_files' \
+ '(-q|--query)'{-q,--query}'[soql query, or filepath of file containing a soql query, to retrieve records]' \
  '(-p|--plan)'{-p,--plan}'[generate mulitple sobject tree files and a plan definition file for aggregated import]' \
  '(-x|--prefix)'{-x,--prefix}'[prefix of generated files]' \
  '(-d|--outputdir)'{-d,--outputdir}'[directory to store files]:file:_files' \

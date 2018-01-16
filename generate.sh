@@ -52,7 +52,7 @@ do
   completion+="\n  $fullCommand)"
   completion+="\n    _command_args=("
 
-  delimitedFlags=$(jq -r '. | select((.command == "'$command'") and (.topic == "'$topic'")) | .flags | .[] | .name + "\t" + .description + "\t" + .char' commands-display.json)
+  delimitedFlags=$(jq -r '. | select((.command == "'$command'") and (.topic == "'$topic'")) | .flags | .[] | .name + "\t" + .description + "\t" + .type + "\t" + .char' commands-display.json)
   
   # create the array based on newlines
   IFS=$'\n'
@@ -66,13 +66,14 @@ do
 
     flagName=${flagArray2[0]}
     flagDescription=${flagArray2[1]}
-    flagChar=${flagArray2[2]}
+    flagType=${flagArray2[2]}
+    flagChar=${flagArray2[3]}
 
-includeFiles=""
+    includeFiles=""
 
-if [[ $flagName == *"file"* ]] || [[ $flagDescription == *"path"* ]] || [[ $flagDescription == *"directory"* ]]; then
-  includeFiles=":file:_files"      
-fi
+    if [ "$flagType" == "file" ] || [ "$flagType" == "filepath" ] || [ "$flagType" == "directory" ]; then
+      includeFiles=":file:_files"      
+    fi
 
     # escape braces
     flagDescription=$(echo $flagDescription | sed -e "s/\[/\\\[/g")
