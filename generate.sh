@@ -68,6 +68,12 @@ do
     flagDescription=${flagArray2[1]}
     flagChar=${flagArray2[2]}
 
+includeFiles=""
+
+if [[ $flagName == *"file"* ]] || [[ $flagDescription == *"path"* ]] || [[ $flagDescription == *"directory"* ]]; then
+  includeFiles=":file:_files"      
+fi
+
     # escape braces
     flagDescription=$(echo $flagDescription | sed -e "s/\[/\\\[/g")
     flagDescription=$(echo $flagDescription | sed -e "s/\]/\\\]/g")
@@ -75,9 +81,9 @@ do
     # different format if there's not a single character arg
     if [ "$flagChar" != "" ]
     then
-      completion+="\n      '(-"$flagChar"|--"$flagName")'{-"$flagChar",--"$flagName"}'["$flagDescription"]' \\\\"
+      completion+="\n      '(-"$flagChar"|--"$flagName")'{-"$flagChar",--"$flagName"}'["$flagDescription"]$includeFiles' \\\\"
     else
-      completion+="\n      '(--"$flagName")--"$flagName"["$flagDescription"]' \\\\"
+      completion+="\n      '(--"$flagName")--"$flagName"["$flagDescription"]$includeFiles' \\\\"
     fi
 
   done
