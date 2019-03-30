@@ -24,7 +24,7 @@ commands=""
 while read name description
 do
   name="$(echo $name | sed -e 's/:/\\:/g')"
-  commands="${commands}\n\t\"$name\":\"$description\""
+  commands="${commands}\n\t\"${name//\"/\\\"}\":\"${description//\"/\\\"}\""
 done <<< "$(jq -r 'to_entries[] | "\(.value.name)\t\(.value.description)"' commands-list.json)"
 
 completion+=$commands
@@ -53,13 +53,13 @@ do
   completion+="\n    _command_args=("
 
   delimitedFlags=$(jq -r '. | select((.command == "'$command'") and (.topic == "'$topic'")) | .flags | .[] | .name + "\t" + .description + "\t" + .type + "\t" + .char' commands-display.json)
-  
+
   # create the array based on newlines
   IFS=$'\n'
   flagArray=($delimitedFlags)
   # create the array based on tabs (from the jq above)
   IFS=$'\t'
-  
+
   for flagArrayRow in "${flagArray[@]}"
   do
     flagArray2=($flagArrayRow)
@@ -72,7 +72,7 @@ do
     includeFiles=""
 
     if [ "$flagType" == "file" ] || [ "$flagType" == "filepath" ] || [ "$flagType" == "directory" ]; then
-      includeFiles=":file:_files"      
+      includeFiles=":file:_files"
     fi
 
     # escape braces
@@ -92,7 +92,7 @@ do
 
   completion+="\n    )"
   completion+="\n    ;;"
-  
+
 done <<< "$(jq -r '"\(.topic) \(.command)"' commands-display.json)"
 
 completion+="\n  esac"
