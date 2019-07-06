@@ -24,7 +24,10 @@ commands=""
 while read name description
 do
   name="$(echo $name | sed -e 's/:/\\:/g')"
-  commands="${commands}\n\t\"$name\":\"$description\""
+  description="$(echo $description | cut -d . -f 1)"
+  if [[ $name == force\\:* ]]; then
+    commands="${commands}\n\t\"${name//\"/\\\"}\":\"${description//\"/\\\"}\""
+  fi
 done <<< "$(jq -r 'to_entries[] | "\(.value.name)\t\(.value.description)"' commands-list.json)"
 
 completion+=$commands
@@ -52,14 +55,14 @@ do
   completion+="\n  $fullCommand)"
   completion+="\n    _command_args=("
 
-  delimitedFlags=$(jq -r '. | select((.command == "'$command'") and (.topic == "'$topic'")) | .flags | .[] | .name + "\t" + .description + "\t" + .type + "\t" + .char' commands-display.json)
-  
+  delimitedFlags=$(jq -r '. | select((.command == "'$command'") and (.topic == "'$topic'")) | .flags | .[] | .name + "\t" + .description + "\t" + .type + "\t" + (.hasValue | tostring) + "\t" + .char' commands-display.json)
+
   # create the array based on newlines
   IFS=$'\n'
   flagArray=($delimitedFlags)
   # create the array based on tabs (from the jq above)
   IFS=$'\t'
-  
+
   for flagArrayRow in "${flagArray[@]}"
   do
     flagArray2=($flagArrayRow)
@@ -67,24 +70,40 @@ do
     flagName=${flagArray2[0]}
     flagDescription=${flagArray2[1]}
     flagType=${flagArray2[2]}
-    flagChar=${flagArray2[3]}
+    flagValue=${flagArray2[3]}
+    flagChar=${flagArray2[4]}
 
     includeFiles=""
 
     if [ "$flagType" == "file" ] || [ "$flagType" == "filepath" ] || [ "$flagType" == "directory" ]; then
-      includeFiles=":file:_files"      
+      includeFiles=":file:_files"
+    elif [ "$flagValue" == "true" ]; then
+      includeFiles=":"
     fi
 
     # escape braces
     flagDescription=$(echo $flagDescription | sed -e "s/\[/\\\[/g")
     flagDescription=$(echo $flagDescription | sed -e "s/\]/\\\]/g")
 
+    # escape quotes
+    flagDescription=$(echo $flagDescription | sed -e "s/'/'\\\\''/g")
+
     # different format if there's not a single character arg
-    if [ "$flagChar" != "" ]
+    if [ "$flagValue" == "true" ]
     then
-      completion+="\n      '(-"$flagChar"|--"$flagName")'{-"$flagChar",--"$flagName"}'["$flagDescription"]$includeFiles' \\\\"
+        if [ "$flagChar" != "" ]
+        then
+            completion+="\n      '(-"$flagChar"|--"$flagName")'{-"$flagChar"=,--"$flagName"=}'["$flagDescription"]$includeFiles' \\\\"
+        else
+            completion+="\n      '(--"$flagName")--"$flagName"=["$flagDescription"]$includeFiles' \\\\"
+        fi
     else
-      completion+="\n      '(--"$flagName")--"$flagName"["$flagDescription"]$includeFiles' \\\\"
+        if [ "$flagChar" != "" ]
+        then
+            completion+="\n      '(-"$flagChar"|--"$flagName")'{-"$flagChar",--"$flagName"}'["$flagDescription"]$includeFiles' \\\\"
+        else
+            completion+="\n      '(--"$flagName")--"$flagName"["$flagDescription"]$includeFiles' \\\\"
+        fi
     fi
 
   done
@@ -92,7 +111,7 @@ do
 
   completion+="\n    )"
   completion+="\n    ;;"
-  
+
 done <<< "$(jq -r '"\(.topic) \(.command)"' commands-display.json)"
 
 completion+="\n  esac"
