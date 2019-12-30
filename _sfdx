@@ -18,6 +18,7 @@ _1st_arguments=(
 	"force\:apex\:test\:report":"display test results"
 	"force\:apex\:test\:run":"invoke Apex tests"
 	"force\:apex\:trigger\:create":"create an Apex trigger"
+	"force\:auth\:device\:login":"authorize an org using a device code"
 	"force\:auth\:jwt\:grant":"authorize an org using the JWT flow"
 	"force\:auth\:list":"list auth connection information"
 	"force\:auth\:logout":"log out from authorized orgs"
@@ -57,7 +58,7 @@ _1st_arguments=(
 	"force\:mdapi\:retrieve\:report":"check the status of a metadata retrieval"
 	"force\:org\:clone":"clone a sandbox org"
 	"force\:org\:create":"create a scratch or sandbox org"
-	"force\:org\:delete":"mark a scratch org for deletion"
+	"force\:org\:delete":"mark a scratch or sandbox org for deletion"
 	"force\:org\:display":"get org description"
 	"force\:org\:list":"list all orgs you’ve created or authenticated to"
 	"force\:org\:open":"open an org in your browser"
@@ -68,7 +69,7 @@ _1st_arguments=(
 	"force\:org\:snapshot\:delete":"delete a scratch org snapshot"
 	"force\:org\:snapshot\:get":"get details about a scratch org snapshot"
 	"force\:org\:snapshot\:list":"list scratch org snapshots"
-	"force\:org\:status":"report sandbox org creation status and headlessly authenticate to org"
+	"force\:org\:status":"report sandbox org creation status and authenticate to org"
 	"force\:package1\:version\:create":"create a first-generation package version in the release org"
 	"force\:package1\:version\:create\:get":"retrieve the status of a package version creation request"
 	"force\:package1\:version\:display":"display details about a first-generation package version"
@@ -143,13 +144,12 @@ case "$words[1]" in
  ;;
  force:apex:class:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-n|--classname)'{-n=,--classname=}'[name of the generated Apex class]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for file creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version number]:' \
+ '(--apiversion)--apiversion=[override the api version used for api requests made by this command]:' \
  )
  ;;
  force:apex:execute)
@@ -226,15 +226,25 @@ case "$words[1]" in
  ;;
  force:apex:trigger:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-n|--triggername)'{-n=,--triggername=}'[name of the generated Apex trigger]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for file creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version number]:' \
+ '(--apiversion)--apiversion=[override the api version used for api requests made by this command]:' \
  '(-s|--sobject)'{-s=,--sobject=}'[sObject to create a trigger on]:' \
- '(-e|--triggerevents)'{-e=,--triggerevents=}'[events that fire the trigger (before insert|before update|before delete|after insert|after update|after delete|after undelete)]:' \
+ '(-e|--triggerevents)'{-e=,--triggerevents=}'[events that fire the trigger]:' \
+ )
+ ;;
+ force:auth:device:login)
+ _command_args=(
+ '(--json)--json[format output as json]' \
+ '(--loglevel)--loglevel=[logging level for this command invocation]:' \
+ '(-i|--clientid)'{-i=,--clientid=}'[OAuth client ID (aka consumer key)]:' \
+ '(-r|--instanceurl)'{-r=,--instanceurl=}'[login URL of the instance the org is on]:' \
+ '(-d|--setdefaultdevhubusername)'{-d,--setdefaultdevhubusername}'[set the authenticated org as the default Dev Hub org for scratch org creation]' \
+ '(-s|--setdefaultusername)'{-s,--setdefaultusername}'[set the authenticated org as the default username that all commands run against]' \
+ '(-a|--setalias)'{-a=,--setalias=}'[set an alias for the authenticated org]:' \
  )
  ;;
  force:auth:jwt:grant)
@@ -447,51 +457,47 @@ case "$words[1]" in
  ;;
  force:lightning:app:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-n|--appname)'{-n=,--appname=}'[name of the generated Lightning app]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for file creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version number]:' \
- '(-x|--internal)'{-x,--internal}'[create the Lightning component for internal use]' \
+ '(--apiversion)--apiversion=[override the api version used for api requests made by this command]:' \
+ '(-i|--internal)'{-i,--internal}'[create lightning bundles without creating a -meta.xml file]' \
  )
  ;;
  force:lightning:component:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-n|--componentname)'{-n=,--componentname=}'[name of the generated Lightning component]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for file creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version number]:' \
+ '(--apiversion)--apiversion=[override the api version used for api requests made by this command]:' \
  '(--type)--type=[type of the Lightning component]:' \
- '(-x|--internal)'{-x,--internal}'[create the Lightning component for internal use]' \
+ '(-i|--internal)'{-i,--internal}'[create lightning bundles without creating a -meta.xml file]' \
  )
  ;;
  force:lightning:event:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-n|--eventname)'{-n=,--eventname=}'[name of the generated Lightning event]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for file creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version number]:' \
- '(-x|--internal)'{-x,--internal}'[create the Lightning component for internal use]' \
+ '(--apiversion)--apiversion=[override the api version used for api requests made by this command]:' \
+ '(-i|--internal)'{-i,--internal}'[create lightning bundles without creating a -meta.xml file]' \
  )
  ;;
  force:lightning:interface:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-n|--interfacename)'{-n=,--interfacename=}'[name of the generated Lightning interface]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for file creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version number]:' \
- '(-x|--internal)'{-x,--internal}'[create the Lightning component for internal use]' \
+ '(--apiversion)--apiversion=[override the api version used for api requests made by this command]:' \
+ '(-i|--internal)'{-i,--internal}'[create lightning bundles without creating a -meta.xml file]' \
  )
  ;;
  force:lightning:lint)
@@ -507,13 +513,12 @@ case "$words[1]" in
  ;;
  force:lightning:test:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-n|--testname)'{-n=,--testname=}'[name of the generated Lightning test]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for file creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-x|--internal)'{-x,--internal}'[create the Lightning component for internal use]' \
+ '(-i|--internal)'{-i,--internal}'[create lightning bundles without creating a -meta.xml file]' \
  )
  ;;
  force:lightning:test:install)
@@ -555,6 +560,9 @@ case "$words[1]" in
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-r|--rootdir)'{-r=,--rootdir=}'[the root directory containing the Metadata API–formatted metadata]:file:_files' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[the output directory to store the source–formatted files]:file:_files' \
+ '(-x|--manifest)'{-x=,--manifest=}'[file path to manifest (package.xml) of metadata types to convert.]:' \
+ '(-m|--metadata)'{-m=,--metadata=}'[comma-separated list of metadata component names to convert]:' \
+ '(-p|--metadatapath)'{-p=,--metadatapath=}'[comma-separated list of paths to the local source files to convert]:' \
  )
  ;;
  force:mdapi:deploy)
@@ -601,8 +609,9 @@ case "$words[1]" in
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-u|--targetusername)'{-u=,--targetusername=}'[username or alias for the target org; overrides default target org]:' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version to use (the default is 46.0)]:' \
- '(-f|--resultfile)'{-f=,--resultfile=}'[path to the file where results are stored]:file:_files' \
+ '(-a|--apiversion)'{-a=,--apiversion=}'[API version to use (the default is 47.0)]:' \
+ '(-f|--resultfile)'{-f=,--resultfile=}'[filter metadata known by the CLI]:file:_files' \
+ '(-k|--filterknown)'{-k,--filterknown}'[path to the file where results are stored]' \
  )
  ;;
  force:mdapi:listmetadata)
@@ -610,7 +619,7 @@ case "$words[1]" in
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-u|--targetusername)'{-u=,--targetusername=}'[username or alias for the target org; overrides default target org]:' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version to use (the default is 46.0)]:' \
+ '(-a|--apiversion)'{-a=,--apiversion=}'[API version to use (the default is 47.0)]:' \
  '(-f|--resultfile)'{-f=,--resultfile=}'[path to the file where results are stored]:file:_files' \
  '(-m|--metadatatype)'{-m=,--metadatatype=}'[metadata type to be retrieved, such as CustomObject; metadata type value is case-sensitive]:' \
  '(--folder)--folder=[folder associated with the component; required for components that use folders; folder names are case-sensitive]:' \
@@ -621,7 +630,7 @@ case "$words[1]" in
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-u|--targetusername)'{-u=,--targetusername=}'[username or alias for the target org; overrides default target org]:' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[target API version for the retrieve (default 46.0)]:' \
+ '(-a|--apiversion)'{-a=,--apiversion=}'[target API version for the retrieve (default 47.0)]:' \
  '(-w|--wait)'{-w=,--wait=}'[wait time for command to finish in minutes (default: -1 (no limit))]:' \
  '(-r|--retrievetargetdir)'{-r=,--retrievetargetdir=}'[directory root for the retrieved files]:file:_files' \
  '(-k|--unpackaged)'{-k=,--unpackaged=}'[file path of manifest of components to retrieve]:file:_files' \
@@ -877,6 +886,7 @@ case "$words[1]" in
  '(-d|--scheduledrundatetime)'{-d=,--scheduledrundatetime=}'[earliest date/time to run the package upgrade test (YYYY-MM-DD HH:mm:ss, in GMT)]:' \
  '(-p|--preview)'{-p,--preview}'[run the package hammer test in the Salesforce preview version]' \
  '(-t|--apextests)'{-t,--apextests}'[after package upgrade validation, run the package'\''s Apex tests in the subscriber org]' \
+ '(-n|--apextestinterface)'{-n=,--apextestinterface=}'[after package upgrade validation, run the Apex tests in the subscriber org that implement this interface]:' \
  )
  ;;
  force:package:install)
@@ -972,6 +982,11 @@ case "$words[1]" in
  '(-a|--versionname)'{-a=,--versionname=}'[the name of the package version to be created]:' \
  '(-n|--versionnumber)'{-n=,--versionnumber=}'[the version number of the package version to be created]:' \
  '(-e|--versiondescription)'{-e=,--versiondescription=}'[the description of the package version to be created]:' \
+ '(-c|--codecoverage)'{-c,--codecoverage}'[calculate the code coverage by running the packaged Apex tests. Note: Managed packages must use this option and meet the code coverage requirements to promote the version.]' \
+ '(--releasenotesurl)--releasenotesurl=[release notes URL]:' \
+ '(--postinstallurl)--postinstallurl=[post-install URL]:' \
+ '(--postinstallscript)--postinstallscript=[post-install script name]:' \
+ '(--uninstallscript)--uninstallscript=[uninstall script name]:' \
  )
  ;;
  force:package:version:create:list)
@@ -1044,17 +1059,15 @@ case "$words[1]" in
  ;;
  force:project:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-n|--projectname)'{-n=,--projectname=}'[name of the generated project]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for project creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
- '(-l|--loginurl)'{-l=,--loginurl=}'[Salesforce instance login URL]:' \
- '(--sourceapiversion)--sourceapiversion[source API version number]' \
  '(-s|--namespace)'{-s=,--namespace=}'[project associated namespace]:' \
  '(-p|--defaultpackagedir)'{-p=,--defaultpackagedir=}'[default package directory name]:' \
- '(-x|--manifest)'{-x,--manifest}'[generate a manifest (package.xml) for change-set-based development]' \
+ '(-x|--manifest)'{-x,--manifest}'[generate a manifest (package.xml) for change-set based development]' \
+ '(-l|--loginurl)'{-l=,--loginurl=}'[Salesforce instance login URL]:' \
  )
  ;;
  force:project:upgrade)
@@ -1090,6 +1103,9 @@ case "$words[1]" in
  '(-r|--rootdir)'{-r=,--rootdir=}'[a source directory other than the default package to convert]:file:_files' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[output directory to store the Metadata API–formatted files in]:file:_files' \
  '(-n|--packagename)'{-n=,--packagename=}'[name of the package to associate with the metadata-formatted files]:' \
+ '(-x|--manifest)'{-x=,--manifest=}'[file path to manifest (package.xml) of metadata types to convert.]:' \
+ '(-p|--sourcepath)'{-p=,--sourcepath=}'[comma-separated list of paths to the local source files to convert]:' \
+ '(-m|--metadata)'{-m=,--metadata=}'[comma-separated list of metadata component names to convert]:' \
  )
  ;;
  force:source:delete)
@@ -1180,7 +1196,7 @@ case "$words[1]" in
  '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-u|--targetusername)'{-u=,--targetusername=}'[username or alias for the target org; overrides default target org]:' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[target API version for the retrieve (default 46.0)]:' \
+ '(-a|--apiversion)'{-a=,--apiversion=}'[target API version for the retrieve (default 47.0)]:' \
  '(-w|--wait)'{-w=,--wait=}'[wait time for command to finish in minutes]:' \
  '(-x|--manifest)'{-x=,--manifest=}'[file path for manifest (package.xml) of components to retrieve]:file:_files' \
  '(-m|--metadata)'{-m=,--metadata=}'[comma-separated list of metadata component names]:' \
@@ -1251,25 +1267,23 @@ case "$words[1]" in
  ;;
  force:visualforce:component:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for file creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
  '(-n|--componentname)'{-n=,--componentname=}'[name of the generated Visualforce component]:' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version number]:' \
+ '(--apiversion)--apiversion=[override the api version used for api requests made by this command]:' \
  '(-l|--label)'{-l=,--label=}'[Visualforce component label]:' \
  )
  ;;
  force:visualforce:page:create)
  _command_args=(
- '(--json)--json[JSON output]' \
+ '(--json)--json[format output as json]' \
  '(--loglevel)--loglevel=[logging level for this command invocation]:' \
  '(-t|--template)'{-t=,--template=}'[template to use for file creation]:' \
  '(-d|--outputdir)'{-d=,--outputdir=}'[folder for saving the created files]:' \
- '(-r|--reflect)'{-r,--reflect}'[switch to return flag detailed information]' \
  '(-n|--pagename)'{-n=,--pagename=}'[name of the generated Visualforce page]:' \
- '(-a|--apiversion)'{-a=,--apiversion=}'[API version number]:' \
+ '(--apiversion)--apiversion=[override the api version used for api requests made by this command]:' \
  '(-l|--label)'{-l=,--label=}'[Visualforce page label]:' \
  )
  ;;
